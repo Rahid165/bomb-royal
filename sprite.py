@@ -14,8 +14,8 @@ class Sprite:
         self.y = y
         sprites.append(self)
 
-        def delete(self):
+    def delete(self):
             sprites.remove(self)
 
-        def draw(self, screen):
+    def draw(self, screen):
             screen.blit(self.image, (self.x, self.y))

@@ -6,6 +6,7 @@ from sprite import sprites, Sprite
 from map import TileKind, Map
 from entity import Entity, active_objs
 from physics import Body
+from plant import Plant
 
 pygame.init()
 
@@ -20,13 +21,22 @@ running = True
 clock = pygame.time.Clock()
 
 player = Entity(Player(), Sprite("images/player.png"), Body(35, 95-20, 26, 20), x=96, y=96)
+tree = Entity(Plant(), Sprite("images/tree2.png"), Body(10*4, 28*4, 13*4, 4*4), x=200, y=100)
+tree2 = Entity(Plant(), Sprite("images/tree2.png"), Body(10*4, 28*4, 13*4, 4*4), x=300, y=100)
+tree3 = Entity(Plant(), Sprite("images/tree2.png"), Body(10*4, 28*4, 13*4, 4*4), x=400, y=100)
 
 tile_kinds = [
-    TileKind("dirt", "images/dirt2.png", False),
+    TileKind("dirt", "images/dirt4.png", False),
     TileKind("gre_brick_wall", "images/grey-brick-wall.png", True),
     TileKind("water", "images/water.png", True)
 ]
 map = Map("maps/start.map", tile_kinds, 64)
+
+def draw_depth(entity):
+    body = entity.entity.get(Body)
+    if body is not None:
+        return entity.entity.y + body.hitbox.y + body.hitbox.height
+    return entity.entity.y
 
 while running:
     for event in pygame.event.get():
@@ -42,8 +52,12 @@ while running:
 
     screen.fill(clear_color)
     map.draw(screen)
-    for s in sprites:
-        s.draw(screen)
+
+    entities = list(active_objs)
+    entities.sort(key=lambda e: e.get_draw_depth())
+
+    for e in entities:
+        e.draw(screen)
 
     pygame.display.flip()
     clock.tick(60)

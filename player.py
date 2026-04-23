@@ -8,7 +8,8 @@ movement_speed = 4
 
 class Player:
     def __init__(self):
-        active_objs.append(self)
+        #active_objs.append(self)
+        pass
 
     def update(self):
         body = self.entity.get(Body)
